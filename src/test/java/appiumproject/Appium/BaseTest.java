@@ -46,7 +46,6 @@ public class BaseTest {
 		driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options); 
 		
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));		
-		//test
 		
 	}
 	
