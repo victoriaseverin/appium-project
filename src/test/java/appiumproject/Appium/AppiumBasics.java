@@ -1,5 +1,8 @@
 package appiumproject.Appium;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.net.URL;
 import java.util.HashMap;
@@ -9,41 +12,40 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 
-public class AppiumBasics {
+public class AppiumBasics extends BaseTest {
 	
 	@Test
-	public void AppiumTest() throws MalformedURLException, URISyntaxException
+	public void WifiSettingsName() throws MalformedURLException, URISyntaxException
 	{
-		//AndroidDriver, IOSDriver
-		//Appium code -> Appium Server -> Mobile
 		
-		 Map<String, String> env = new HashMap<String, String>(System.getenv());
-	        env.put("ANDROID_HOME", "/Users/admin/Library/Android/sdk");
-	        env.put("JAVA_HOME", "/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home");
+		//xpath, id, accessibilityId, classname, androidUIAutomator
+		driver.findElement(AppiumBy.accessibilityId("Preference")).click();
 		
-		AppiumDriverLocalService service = new AppiumServiceBuilder()
-				.withAppiumJS(new File("/usr/local/lib/node_modules/appium/build/lib/main.js")).
-				withIPAddress("127.0.0.1").usingPort(4723).withEnvironment(env).build();
+		//tagname[@attribute ='value']
+		driver.findElement(By.xpath("//android.widget.TextView[@content-desc='3. Preference dependencies']"
+				+ "")).click();
 		
-		service.start();
+		driver.findElement(By.id("android:id/checkbox")).click();
 		
-	       if (service == null || !service.isRunning()) {
-	            throw new IllegalStateException("Appium service did not start correctly!");
-	        }
+		driver.findElement(By.xpath("(//android.widget.RelativeLayout)[2]")).click();
 		
-		UiAutomator2Options options = new UiAutomator2Options();
-		options.setDeviceName("emulator-5554");
-		options.setApp("/Users/admin/eclipse-workspace/Appium/src/test/java/resources/ApiDemos-debug.apk");
+		String alertTitle = driver.findElement(By.id("android:id/alertTitle")).getText();
+		Assert.assertEquals(alertTitle, "WiFi settings");
 		
-		AndroidDriver driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options); 
+		driver.findElement(By.id("android:id/edit")).sendKeys("VictoriaWifi");
 		
-		driver.quit();
-		service.stop();
+		driver.findElements(AppiumBy.className("android.widget.Button")).get(1).click();
+		
+		
+		
+		
+		
 		
 	}
 
